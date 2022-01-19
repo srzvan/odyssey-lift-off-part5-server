@@ -2,8 +2,11 @@ const { ApolloServer } = require('apollo-server');
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 const TrackAPI = require('./datasources/track-api');
+const dotEnv = require('dotenv');
 
 async function startApolloServer(typeDefs, resolvers) {
+  dotEnv.config();
+
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -14,7 +17,7 @@ async function startApolloServer(typeDefs, resolvers) {
     },
   });
 
-  const { url, port } = await server.listen();
+  const { url, port } = await server.listen({ port: process.env.PORT || 4000 });
   console.log(`
       🚀  Server is running
       🔉  Listening on port ${port}
